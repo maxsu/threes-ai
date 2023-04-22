@@ -4,6 +4,10 @@ bin/
 log/
 events/
 
+# Setuptools intermediaries
+threes_ai.egg-info/
+build/
+
 # autoconf intermediates
 aclocal.m4
 autom4te.cache/
@@ -13,3 +17,6 @@ config.h
 config.log
 config.status
 Makefile
+
+# Vscode files
+.vscode

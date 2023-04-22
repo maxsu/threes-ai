@@ -1,4 +1,9 @@
-AI for the game Threes! by Sirvo LLC. You can get the game from here: http://asherv.com/threes/
+# Threes-ai
+
+## AI for the game [Threes!](http://asherv.com/threes/)
+
+
+By [Robert Xiao](nneonneo@gmail.com)
 
 Building this AI was the inspiration for my later [2048 AI](https://github.com/nneonneo/2048-ai), and some of the ideas from the 2048 AI have been backported to this AI as well.
 

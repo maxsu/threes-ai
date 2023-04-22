@@ -1,18 +1,17 @@
-''' Base functions for move assistants. '''
+""" Base functions for move assistants. """
 
-from __future__ import print_function
-import time
-from threes import *
 from collections import Counter
-from threes_ai_c import find_best_move, set_heurweights
+import time
+
+from threes import *
+from ai import find_best_move, set_heurweights
 from deck_reconstruct import DeckReconstructor
 
-__author__ = 'Robert Xiao <nneonneo@gmail.com>'
 
 def getmove(m1, m2):
-    ''' Find the move and new tile which transforms board m1 to m2.
+    """Find the move and new tile which transforms board m1 to m2.
 
-    Returns (move, tile) or None if it cannot be determined uniquely. '''
+    Returns (move, tile) or None if it cannot be determined uniquely."""
 
     possible = []
 
@@ -49,18 +48,21 @@ def getmove(m1, m2):
     if len(possible) == 0:
         print("Error: impossible situation")
     elif len(possible) > 1:
-        print("Warning: ambiguous result: possibilities:", end=' ')
+        print("Warning: ambiguous result: possibilities:", end=" ")
         for m, t in possible:
-            print("%s,%d" % (movenames[m], t), end=' ')
+            print("%s,%d" % (movenames[m], t), end=" ")
         print()
         return possible[0]
     else:
         return possible[0]
 
-def initial_deck():
-    return Counter([1]*4 + [2]*4 + [3]*4)
 
-movenames = ['up', 'down', 'left', 'right']
+def initial_deck():
+    return Counter([1] * 4 + [2] * 4 + [3] * 4)
+
+
+movenames = ["up", "down", "left", "right"]
+
 
 def _step_from_start(board, deck, newboard):
     if all(v == 0 for v in deck.values()):
@@ -76,30 +78,40 @@ def _step_from_start(board, deck, newboard):
 
     return deck
 
+
 def _step_reconstruct(board, deck, newboard):
     move, t = getmove(board, newboard)
     print("Previous move:", movenames[move], "; tile:", t)
     if t <= 3:
         deck.update(t)
 
+
 def run_assistant(gen_board, make_move_func, from_start=True):
-    ''' Run the assistant.
-    
+    """Run the assistant.
+
     gen_board: A generator which returns (board, next_tile, skip_move) tuples.
         If skip_move is True, the assistant will not calculate or make a move.
     make_move_func: A function to call which will make the recommended move.
     from_start: Are we starting from the first move?
         If False, the deck will be estimated.
-    '''
+    """
 
-    set_heurweights(2.5603675951186942, 48.075499534692185, 0.70005740882109824, 127.87624414823753, 253.7959629528122, 945.27171328243628, 674.42839422651991)
+    set_heurweights(
+        2.5603675951186942,
+        48.075499534692185,
+        0.70005740882109824,
+        127.87624414823753,
+        253.7959629528122,
+        945.27171328243628,
+        674.42839422651991,
+    )
     board = None
     deck = None
     moveno = 0
 
     for newboard, tileset, skip_move in gen_board:
         if not tileset:
-            break # game over
+            break  # game over
         if board is not None and (board == newboard).all():
             print("Warning: previous move not made")
             time.sleep(0.3)
@@ -110,7 +122,7 @@ def run_assistant(gen_board, make_move_func, from_start=True):
             time.sleep(0.3)
             continue
         print()
-        print("Move number", moveno+1)
+        print("Move number", moveno + 1)
         moveno += 1
 
         if from_start:
@@ -128,7 +140,10 @@ def run_assistant(gen_board, make_move_func, from_start=True):
 
         print(to_val(board))
         print("Current score:", to_score(board).sum())
-        print("Next tile: %s (deck=1:%d, 2:%d, 3:%d)" % (tileset, deck[1], deck[2], deck[3]))
+        print(
+            "Next tile: %s (deck=1:%d, 2:%d, 3:%d)"
+            % (tileset, deck[1], deck[2], deck[3])
+        )
 
         if not skip_move:
             move = find_best_move(board, deck, tileset)
@@ -136,11 +151,12 @@ def run_assistant(gen_board, make_move_func, from_start=True):
                 break
             make_move_func(movenames[move])
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # A simple demonstration of the assistant.
     move = None
     game = play_game()
-    movenum = dict((j,i) for i,j in enumerate(movenames))
+    movenum = dict((j, i) for i, j in enumerate(movenames))
 
     def gen_board():
         while True:
