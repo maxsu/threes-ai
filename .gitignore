@@ -11,9 +11,12 @@ build/
 # autoconf intermediates
 aclocal.m4
 autom4te.cache/
+config.h
+config.h.in
+configure
+install-sh
 
 # configure script output
-config.h
 config.log
 config.status
 Makefile

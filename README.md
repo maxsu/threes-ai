@@ -31,6 +31,7 @@ If you want to build it yourself from source (e.g. if you're making changes), fo
 
 Execute
 
+    ./autogen.sh
     ./configure
     make
 

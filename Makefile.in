@@ -26,10 +26,25 @@ bin/%$(EXEEXT): bin/%.$(OBJEXT)
 bin/%.so: bin/%.$(OBJEXT)
 	$(CXXLD) $(CXXFLAGS) -shared $(LDFLAGS) $^ $(LDLIBS) -o $@
 
-bin/%.$(OBJEXT) : %.cpp
+bin/%.$(OBJEXT) : threes_cpp/%.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
 
 clean:
-	$(RM) -rf bin/*
+	# C++ build files
+	$(RM) -rf bin/
+
+cleanall:
+	clean
+	
+	# Python build files
+	$(RM) -rf build/ 
+	
+	# Autoconf files
+	$(RM) -rf autom4te.cache/
+	$(RM) aclocal.m4 configure configure~ install-sh install-sh~ 
+	$(RM) config.h config.h.in~ config.h.in
+
+	# Configure files
+	$(RM) config.log config.status Makefile
 
 .PHONY: all clean
