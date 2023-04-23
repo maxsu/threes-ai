@@ -1,7 +1,7 @@
 """ Basic Python implementation of Threes! """
 
 import random
-
+from .ui import IUi
 import numpy as np
 
 
@@ -108,26 +108,23 @@ def play_game():
         random.choice(changelines)[-1] = random.choice(tileset)
 
 
-def play_game_interactive():
-    game = play_game()
+def play_game_interactive(ui: IUi):
+    # Start game
     move = None
+    game = play_game()
 
+    # Execute game loop
     while True:
-        m, tileset, valid = game.send(move)
-        print(to_val(m))
+        # Send move and get next state
+        board, next_tiles, valid_moves = game.send(move)
 
-        if not valid:
-            print("Game over.")
-            print("Your score is", to_score(m).sum())
-            break
+        # Show game state
+        ui.show_board(board, next_tiles, valid_moves)
 
-        print("next tile:", list(to_val(tileset)))
+        # Game over?
+        if not valid_moves:
+            ui.game_over(board)
+            return
 
-        movelist = "".join("UDLR"[i] for i in valid)
-        while True:
-            move = input("Move [%s]? " % movelist).upper()
-            if move not in movelist:
-                print("Invalid move.")
-                continue
-            move = "UDLR".find(move)
-            break
+        # Get move from user
+        move = ui.get_move(board, next_tiles, valid_moves)
