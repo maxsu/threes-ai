@@ -46,7 +46,6 @@ def get_c_state(m, deck, tileset):
 
 
 if MULTITHREAD:
-
     pool = ThreadPool(4)
 
     def score_toplevel_move(args):
@@ -79,7 +78,7 @@ def set_heurweights(*args):
     threes.init_tables()
 
 
-def play_with_search(verbose=True):
+def play_with_search(verbose=True, limit=None):
     seed = hash(str(time.time()))
     print("seed=%d" % seed)
     random.seed(seed)
@@ -98,6 +97,9 @@ def play_with_search(verbose=True):
             deck = initial_deck.copy() - Counter(m.flatten())
 
         if not valid:
+            break
+
+        if limit and moveno >= limit:
             break
 
         if verbose:
