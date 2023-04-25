@@ -10,6 +10,11 @@ def to_val(x):
     min0 = np.where(x < 3, 0, x - 3)
     return np.where(x < 3, x, 3 * (2**min0))
 
+class MoveDirection(Enum):
+    UP = 0
+    DOWN = 1
+    LEFT = 2
+    RIGHT = 3
 
 def to_score(x):
     x = np.asarray(x)
